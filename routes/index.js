@@ -7,6 +7,11 @@ const MovieInstance = new MovieController(new MovieService());
 const UserController = require(`./../controllers/userController`);
 const UserService = require(`./../services/userService`);
 const UserInstance = new UserController(new UserService());
+
+router.get("/*", function (req, res) {
+  res.send("Error. Usar /movies, /users o /login");
+});
+
 router.get("/movies", function (req, res, next) {
   MovieInstance.getMovies(req, res);
 });
