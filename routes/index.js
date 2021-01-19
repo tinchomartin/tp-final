@@ -8,10 +8,6 @@ const UserController = require(`./../controllers/userController`);
 const UserService = require(`./../services/userService`);
 const UserInstance = new UserController(new UserService());
 
-router.get("/*", function (req, res) {
-  res.send("Error. Usar /movies, /users o /login");
-});
-
 router.get("/movies", function (req, res, next) {
   MovieInstance.getMovies(req, res);
 });
@@ -30,6 +26,10 @@ router.get("/users", function (req, res, next) {
 
 router.post("/login", passport.authenticate("local"), function (req, res) {
   return res.send("ok");
+});
+
+router.get("/*", function (req, res) {
+  res.send("Para comenzar ingresa a usar /movies, /users o /login");
 });
 
 module.exports = router;
