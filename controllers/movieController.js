@@ -24,16 +24,75 @@ class MovieController {
   }
 
   async addMovie(req, res) {
+    const { body } = req;
     const { name, category, type } = req.body;
+    console.log(body);
     if ((name, category, type)) {
       try {
-        const query = await this.movieService.addMovie(req.body);
+        if (req.file) {
+          const { filename } = req.file;
+          const newBody = {
+            name: name,
+            category: category,
+            image: filename,
+            type: type,
+          };
+          const query = await this.movieService.addMovie(newBody);
+        } else {
+          const query = await this.movieService.addMovie(body);
+        }
         res.status(200).send("Registro agregado");
       } catch (error) {
-        res.status(500).send("Error al crear");
+        res.sendStatus(500);
       }
     } else {
-      res.status(400).send("Falta información requerida");
+      return res.status(400).send("Falta información requerida");
+    }
+  }
+
+  async updateMovie(req, res) {
+    const { body } = req;
+    const { id } = req.params;
+
+    if (id && body) {
+      try {
+        if (req.file) {
+          const { name, category, type } = req.body;
+          const { filename } = req.file;
+          const newBody = {
+            name: name,
+            category: category,
+            image: filename,
+            type: type,
+          };
+          const query = await this.movieService.updateMovie(id, newBody);
+        } else {
+          const query = await this.movieService.updateMovie(id, body);
+        }
+        res.status(200).send("Actualización registrada con exito");
+      } catch (error) {
+        res.sendStatus(500);
+        console.log(error);
+      }
+    } else {
+      return res.status(400).send("Faltan completar campos.");
+    }
+  }
+
+  async deleteMovie(req, res) {
+    const { id } = req.params;
+    const checkId = await this.movieService.checkMovieId(id);
+
+    if (checkId === true) {
+      try {
+        const query = await this.movieService.deleteMovie(id);
+        res.status(200).send("Registro borrado");
+      } catch (error) {
+        console.log(error);
+        res.status(500).send("Error al borrar");
+      }
+    } else {
+      res.status(400).send("El id ingresado no existe");
     }
   }
 }

@@ -13,17 +13,15 @@ passport.use(
 
     async (username, password, cb) => {
       try {
-        // console.log(username, password);
         const userData = await UserInstance.getByName(username);
         username.toLowerCase();
-        // console.log(userData);
 
         if (!userData) {
           console.log("error de usuario");
           return cb(null, false);
         }
         if (userData.password != password) {
-          console.log("error de clave");
+          console.log("contraseña incorrecta");
           return cb(null, false);
         }
 
@@ -34,7 +32,7 @@ passport.use(
         //   console.log("error de contraseña");
         //   return cb(null, false);
         // }
-        console.log("usuario exitoso");
+        console.log("login exitoso");
         // se debe agregar passport initialize y passport session en app.js porque sino da error
         return cb(null, userData);
       } catch (err) {
