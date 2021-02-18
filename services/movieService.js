@@ -1,8 +1,8 @@
 const Movie = require(`./../models/movieModel`);
 
 class MovieService {
-  getMovies() {
-    const query = Movie.find().exec();
+  getMovies(data) {
+    const query = Movie.find().limit(data);
     return query;
   }
 
@@ -16,8 +16,9 @@ class MovieService {
     return query.save();
   }
 
+  //funcion complementaria para chequear si el id existe
   checkMovieId(id) {
-    const query = Movie.exists({ id: id });
+    const query = Movie.exists({ _id: id });
     return query;
   }
 
@@ -27,7 +28,7 @@ class MovieService {
   }
 
   deleteMovie(id) {
-    const query = Movie.findByIdAndDelete(id);
+    const query = Movie.findByIdAndRemove(id);
     return query;
   }
 }

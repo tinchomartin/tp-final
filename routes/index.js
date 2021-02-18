@@ -21,20 +21,22 @@ const UserInstance = new UserController(new UserService());
 const checkAdmin = require("./../utils/checkAdmin");
 const checkLogin = require("./../utils/checkLogin");
 
-router.get(
-  "/movies",
-  /* checkLogin, */ function (req, res, next) {
-    MovieInstance.getMovies(req, res);
-  }
-);
+router.get("/movies", checkLogin, function (req, res, next) {
+  MovieInstance.getMovies(req, res);
+});
 
 router.get("/movies/:id", checkLogin, function (req, res, next) {
   MovieInstance.getMovieById(req, res);
 });
 
-router.post("/movies", upload.single("image"), function (req, res, next) {
-  MovieInstance.addMovie(req, res);
-});
+router.post(
+  "/movies",
+  upload.single("image"),
+  checkAdmin,
+  function (req, res, next) {
+    MovieInstance.addMovie(req, res);
+  }
+);
 
 router.put(
   "/movies/edit/:id",
@@ -45,13 +47,9 @@ router.put(
   }
 );
 
-router.delete(
-  "/movies/delete/:id",
-  // checkAdmin,
-  function (req, res, next) {
-    MovieInstance.deleteMovie(req, res);
-  }
-);
+router.delete("/movies/delete/:id", checkAdmin, function (req, res, next) {
+  MovieInstance.deleteMovie(req, res);
+});
 
 router.get("/users", function (req, res, next) {
   UserInstance.getUser(req, res);
@@ -63,6 +61,14 @@ router.get("/users/:id", function (req, res, next) {
 
 router.post("/users", function (req, res) {
   UserInstance.addUser(req, res);
+});
+
+router.put("/users/edit/:id", checkAdmin, function (req, res) {
+  UserInstance.editUser(req, res);
+});
+
+router.delete("/users/delete/:id", checkAdmin, function (req, res) {
+  UserInstance.deleteUser(req, res);
 });
 
 router.post("/login", passport.authenticate("local"), function (req, res) {

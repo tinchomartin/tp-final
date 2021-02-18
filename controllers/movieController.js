@@ -4,7 +4,10 @@ class MovieController {
   }
 
   async getMovies(req, res) {
-    const query = await this.movieService.getMovies();
+    const { limit } = req.query;
+    const limitToNumber = parseInt(limit);
+
+    const query = await this.movieService.getMovies(limitToNumber);
     res.send(query);
   }
 
@@ -81,15 +84,18 @@ class MovieController {
 
   async deleteMovie(req, res) {
     const { id } = req.params;
-    const checkId = await this.movieService.checkMovieId(id);
 
-    if (checkId === true) {
-      try {
-        const query = await this.movieService.deleteMovie(id);
-        res.status(200).send("Registro borrado");
-      } catch (error) {
-        console.log(error);
-        res.status(500).send("Error al borrar");
+    if (id.length === 24) {
+      const checkId = await this.movieService.checkMovieId(id);
+      if (checkId === true) {
+        try {
+          const query = await this.movieService.deleteMovie(id);
+          res.status(200).send("Registro borrado");
+        } catch (error) {
+          res.status(500).send("Error al borrar");
+        }
+      } else {
+        res.status(400).send("El id ingresado no existe");
       }
     } else {
       res.status(400).send("El id ingresado no existe");

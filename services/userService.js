@@ -1,8 +1,14 @@
 const User = require(`./../models/userModel`);
+const bcrypt = require("bcrypt");
 
 class UserService {
-  getUser() {
-    const query = User.find().exec();
+  getUser(data) {
+    const query = User.find().limit(data).exec();
+    return query;
+  }
+
+  getByName(name) {
+    const query = User.findOne({ name }).exec();
     return query;
   }
 
@@ -12,14 +18,34 @@ class UserService {
     return query;
   }
 
+  //funcion complementaria para chequear si el usuario ya esta registrado
+
   checkUser(name) {
     const query = User.exists({ name: name });
     return query;
   }
+  //funcion complementaria para chequear si existe el id ingresado
+  checkUserId(id) {
+    const query = User.exists({ _id: id });
+    return query;
+  }
 
   addUser(body) {
-    const query = new User(body);
-    return query.save();
+    return bcrypt.hash(body.password, 10).then((hash) => {
+      body.password = hash;
+      const newUser = new User(body);
+      return newUser.save();
+    });
+  }
+
+  editUser(id, data) {
+    const query = User.findByIdAndUpdate(id, data);
+    return query;
+  }
+
+  deleteUser(id) {
+    const query = User.findByIdAndRemove(id);
+    return query;
   }
 }
 
