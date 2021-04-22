@@ -17,23 +17,13 @@ passport.use(
         username.toLowerCase();
 
         if (!userData) {
-          console.log("error de usuario");
           return cb(null, false);
         }
 
-        //condicional de passport, se quita al agregar bcrypt
-        // if (userData.password != password) {
-        //   console.log("contraseña incorrecta");
-        //   return cb(null, false);
-        // }
-
         const compare = await bcrypt.compare(password, userData.password);
-        // if (userData.password != password) {
         if (!compare) {
           return cb(null, false);
         }
-        console.log("login exitoso");
-        // se debe agregar passport initialize y passport session en app.js porque sino da error
         return cb(null, userData);
       } catch (err) {
         console.log(err);

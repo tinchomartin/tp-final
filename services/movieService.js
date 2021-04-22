@@ -16,7 +16,6 @@ class MovieService {
     return query.save();
   }
 
-  //funcion complementaria para chequear si el id existe
   checkMovieId(id) {
     const query = Movie.exists({ _id: id });
     return query;

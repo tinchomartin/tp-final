@@ -15,7 +15,6 @@ class UserController {
   async getUserById(req, res) {
     const { id } = req.params;
     const query = await this.userService.getUserById(id);
-    console.log(query, id);
     res.send(query);
   }
 
@@ -46,7 +45,6 @@ class UserController {
       const checkUserId = await this.userService.checkUserId(id);
 
       if (checkUserId === true) {
-        console.log(body.length);
         if (body) {
           try {
             const query = await this.userService.editUser(id, body);

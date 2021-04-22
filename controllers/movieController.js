@@ -16,7 +16,6 @@ class MovieController {
     const query = await this.movieService.getMovieById(id);
     if (query) {
       try {
-        console.log(`Registro ${id} encontrado`);
         res.status(200).send(query);
       } catch (error) {
         res.status(500).send("Error al concretar la solicitud");
@@ -29,7 +28,6 @@ class MovieController {
   async addMovie(req, res) {
     const { body } = req;
     const { name, category, type } = req.body;
-    console.log(body);
     if ((name, category, type)) {
       try {
         if (req.file) {
@@ -75,7 +73,6 @@ class MovieController {
         res.status(200).send("Actualización registrada con exito");
       } catch (error) {
         res.sendStatus(500);
-        console.log(error);
       }
     } else {
       return res.status(400).send("Faltan completar campos.");

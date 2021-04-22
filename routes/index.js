@@ -75,6 +75,10 @@ router.post("/login", passport.authenticate("local"), function (req, res) {
   return res.send("ok");
 });
 
+router.get("/verify", function (req, res) {
+  res.send(req.user);
+});
+
 router.get("/*", function (req, res) {
   res.send(
     "Para comenzar ingresa a /movies o /users para obtener los listados. /login para ingresar tus credenciales"

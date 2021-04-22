@@ -18,13 +18,10 @@ class UserService {
     return query;
   }
 
-  //funcion complementaria para chequear si el usuario ya esta registrado
-
   checkUser(name) {
     const query = User.exists({ name: name });
     return query;
   }
-  //funcion complementaria para chequear si existe el id ingresado
   checkUserId(id) {
     const query = User.exists({ _id: id });
     return query;
